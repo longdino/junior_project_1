@@ -296,14 +296,65 @@ void getCommand(vector<string> input) {
         for (auto p: playerlist) {
             if (p.id == pid) {
                 cout << "Player: " << p.name << endl;
+
+                // calculate total gamerscore
                 int points = 0;
-                for (auto pts: p.point) {
-                    points += pts;
+                for (auto vid: p.victories) {
+                    for (auto v: victorylist) {
+                        if (v.victory_id == vid) {
+                            points += v.points;
+                        }
+                    }
                 }
-                cout << "Total Gamerscore: " << points << " pts" << endl;
+                cout << "Total Gamerscore: " << points << " pts" << endl << endl;
+                cout << "   Game             Victories    Gamerscore     IGN" << endl;
+                cout << "-----------------------------------------------------------------------" << endl;
+                for (int i=0; i < gamelist.size(); i++) {
+                    int num_wins = 0;
+                    for (int j=0; j < gamelist[i].playerIDs.size(); j++) {
+                        if (gamelist[i].playerIDs[j] == pid) {
+                            int gid = gamelist[i].id;
+                            int points2 = 0;
+                            for (int k=0; k < p.wingames.size(); k++) {
+                                if (p.wingames[k] == gid) {
+                                    p.victories[k];
+                                    for (auto v: victorylist) {
+                                        if (v.victory_id == p.victories[k]) {
+                                            points2 += v.points;
+                                            num_wins += 1;
+                                        }
+                                    }
+                                }
+                            }
+                            cout << i+1 << ". " 
+                                << gamelist[i].name << ", " 
+                                << num_wins << "/ ," 
+                                << points2 << " pts " 
+                                << gamelist[i].playerIGNs[j] << endl;
+                        }
+                    }
+                }
+                cout << endl << "    Friend            Gamerscore" << endl;
+                cout << "-------------------------------------------------" << endl;
+                for (int i=0; i < p.friends.size(); i++) {
+                    int fid = p.friends[i];
+                    for (auto f: playerlist) {
+                        if (f.id == fid) {
+                            // calculate total gamerscore
+                            int points = 0;
+                            for (auto vid: f.victories) {
+                                for (auto v: victorylist) {
+                                    if (v.victory_id == vid) {
+                                        points += v.points;
+                                    }
+                                }
+                            }
+                            cout << i+1 << ". " << f.name << "    " << points << " pts" << endl;
+                        }
+                    }
+                }
             }
         }
-
 	}
 	else if (input[0].find("SummarizeGame") == 0) {
 
